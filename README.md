@@ -34,3 +34,7 @@
 > To install the library, clone down the repository and run:
 
     python setup.py install
+
+> OR run:
+
+    pip install github-skills
