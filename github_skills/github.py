@@ -19,10 +19,14 @@ def get_skills(username):
 
         count += 1
 
-    return map(
-        lambda x: {
-            'language': x[0],
-            'percentage': (float(x[1]) / float(count)) * 100
-        },
-        skills.items()
+    return sorted(
+        map(
+            lambda x: {
+                'language': x[0],
+                'percentage': (float(x[1]) / float(count)) * 100
+            },
+            skills.items()
+        ),
+        key=lambda x: x['percentage'],
+        reverse=True
     )
