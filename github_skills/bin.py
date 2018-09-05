@@ -1,6 +1,7 @@
 import sys
 from tabulate import tabulate
 from github_skills import get_skills
+from github_skills.exceptions import RateLimitException
 
 
 def run():
@@ -8,7 +9,11 @@ def run():
         print('Usage: github-skills <username>')
         return
 
-    skills = get_skills(sys.argv[1])
+    try:
+        skills = get_skills(sys.argv[1])
+    except RateLimitException as e:
+        print(e.message)
+        return
 
     print(tabulate(
         [(s['language'], '{}%'.format(s['percentage'])) for s in skills],

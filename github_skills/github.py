@@ -1,10 +1,15 @@
 import requests
 import json
+from github_skills.exceptions import RateLimitException
 
 
 def get_skills(username):
     skills = {}
     resp = requests.get('https://api.github.com/users/' + username + '/repos')
+
+    if resp.status_code != 200:
+        raise RateLimitException(json.loads(resp.text)['message'])
+
     repos = json.loads(resp.text)
     count = 0
 
