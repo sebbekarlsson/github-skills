@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='github-skills',
-    version='1.0',
+    version='1.0.2',
     install_requires=[
         'requests',
         'tabulate'

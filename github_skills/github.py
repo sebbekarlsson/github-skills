@@ -3,14 +3,33 @@ import json
 from github_skills.exceptions import RateLimitException
 
 
+def get_repos(username):
+    page = 0
+    repos = []
+
+    while True:
+        resp = requests.get(
+            'https://api.github.com/users/' + username + '/repos?page={}'
+            .format(page)
+        )
+
+        if resp.status_code != 200:
+            raise RateLimitException(json.loads(resp.text)['message'])
+
+        _repos = json.loads(resp.text)
+
+        if _repos:
+            [repos.append(r) for r in _repos]
+            page += 1
+        else:
+            break
+
+    return repos
+
+
 def get_skills(username):
     skills = {}
-    resp = requests.get('https://api.github.com/users/' + username + '/repos')
-
-    if resp.status_code != 200:
-        raise RateLimitException(json.loads(resp.text)['message'])
-
-    repos = json.loads(resp.text)
+    repos = get_repos(username)
     count = 0
 
     for repo in filter(lambda x: x['language'] is not None, repos):
